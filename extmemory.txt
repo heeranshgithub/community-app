@@ -1,0 +1,2 @@
+1. post mutation: to send register req, and save things like name, num and pass in mongodb.
+2. save user.name, user.number and token into both global state and Async Storage

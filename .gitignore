@@ -1,0 +1,93 @@
+# Node.js dependencies
+/node_modules/
+/npm-debug.log
+/yarn-error.log
+.pnpm-debug.log
+
+# Environment variables
+.env
+.env.*.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# React Native specific
+# React Native packager files
+.expo/
+.expo-shared/
+
+# Build output
+build/
+ios/build/
+android/app/build/
+android/.gradle/
+android/.idea/
+android/.cxx/
+android/.settings/
+
+# Gradle files
+.gradle/
+*.iml
+
+# Android Studio
+.idea/
+
+# Xcode
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+xcuserdata/
+*.xcworkspace
+*.xcuserstate
+DerivedData/
+
+# Metro bundler
+.rncache/
+/babel.config.js.bak
+
+# Bundled JavaScript files
+index.android.bundle
+index.ios.bundle
+*.bundle
+
+# Coverage reports
+coverage/
+
+# MongoDB
+*.log
+*.lock
+data/
+dump/
+
+# Debug and IDE specific
+*.swp
+*~
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+*.sublime-project
+.vscode/
+
+# Miscellaneous
+.idea/
+*.log
+*.tmp
+*.temp
+*.pid
+
+# Ignore build artifacts
+dist/
+public/
