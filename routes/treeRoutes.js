@@ -1,8 +1,8 @@
-import express from 'express'
-import { getTree } from '../controllers/treeController.js'
+import express from 'express';
+import { getTree } from '../controllers/treeController.js';
 
-const router = express.Router()
+const router = express.Router();
 
-router.route('/tree').get(getTree)
+router.route('/:id').get(getTree);
 
-export default router
+export default router;

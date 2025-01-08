@@ -1,50 +1,57 @@
-import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import Colors from '../theme/Colors'
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import Colors from '../theme/Colors';
+import { sampleUserData as userData } from '../utils';
 
 const FamilyTree = () => {
-  const userData = {
-    name: 'Mohandas',
-    gender: 'male',
-    spouse: { gender: 'female', spouseName: 'Kasturba' },
-    parents: { father: 'Karamchand', mother: 'Putlibhai' },
-    children: [
-      { gender: 'male', childName: 'Harilal' },
-      { gender: 'male', childName: 'Manilal' },
-      { gender: 'male', childName: 'Ramdas' },
-      { gender: 'male', childName: 'Devdas' },
-      { gender: 'female', childName: 'Devika' },
-      { gender: 'female', childName: 'Ramika' },
-    ],
-  }
-
   // Helper to chunk children into rows of 3
   const chunkArray = (arr, size) => {
-    const chunks = []
+    const chunks = [];
     for (let i = 0; i < arr.length; i += size) {
-      chunks.push(arr.slice(i, i + size))
+      chunks.push(arr.slice(i, i + size));
     }
-    return chunks
-  }
+    return chunks;
+  };
 
-  const childrenChunks = chunkArray(userData?.children || [], 3)
+  const siblingsChunks = chunkArray(userData?.siblings || [], 3);
+  const childrenChunks = chunkArray(userData?.children || [], 3);
 
   return (
     <View style={styles.container}>
       {/* Parents */}
       <Text style={styles.heading}>Father and Mother</Text>
       <View style={styles.row}>
-        <View
-          style={[styles.node, { backgroundColor: Colors.genderBlueNodeColor }]}
-        >
+        <View style={[styles.node, { backgroundColor: Colors.genderBlueNode }]}>
           <Text style={styles.text}>{userData?.parents?.father}</Text>
         </View>
-        <View
-          style={[styles.node, { backgroundColor: Colors.genderPinkNodeColor }]}
-        >
+        <View style={[styles.node, { backgroundColor: Colors.genderPinkNode }]}>
           <Text style={styles.text}>{userData?.parents?.mother}</Text>
         </View>
       </View>
+
+      {/* Siblings */}
+      <Text style={styles.heading}>Siblings</Text>
+
+      {(siblingsChunks || []).map((chunk, rowIndex) => (
+        <View key={rowIndex} style={styles.row}>
+          {(chunk || []).map((child, index) => (
+            <View
+              key={index}
+              style={[
+                styles.node,
+                {
+                  backgroundColor:
+                    child.gender === 'male'
+                      ? Colors.genderBlueNode
+                      : Colors.genderPinkNode,
+                },
+              ]}
+            >
+              <Text style={styles.text}>{child?.childName}</Text>
+            </View>
+          ))}
+        </View>
+      ))}
 
       {/* User and Spouse */}
       <Text style={styles.heading}>You and Spouse</Text>
@@ -55,8 +62,8 @@ const FamilyTree = () => {
             {
               backgroundColor:
                 userData?.gender === 'male'
-                  ? Colors.genderBlueNodeColor
-                  : Colors.genderPinkNodeColor,
+                  ? Colors.genderBlueNode
+                  : Colors.genderPinkNode,
             },
           ]}
         >
@@ -68,12 +75,12 @@ const FamilyTree = () => {
             {
               backgroundColor:
                 userData?.gender === 'male'
-                  ? Colors.genderPinkNodeColor
-                  : Colors.genderBlueNodeColor,
+                  ? Colors.genderPinkNode
+                  : Colors.genderBlueNode,
             },
           ]}
         >
-          <Text style={styles.text}>{userData?.spouse?.spouseName}</Text>
+          <Text style={styles.text}>{userData?.spouse}</Text>
         </View>
       </View>
 
@@ -90,8 +97,8 @@ const FamilyTree = () => {
                 {
                   backgroundColor:
                     child.gender === 'male'
-                      ? Colors.genderBlueNodeColor
-                      : Colors.genderPinkNodeColor,
+                      ? Colors.genderBlueNode
+                      : Colors.genderPinkNode,
                 },
               ]}
             >
@@ -101,8 +108,8 @@ const FamilyTree = () => {
         </View>
       ))}
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -137,6 +144,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 14,
   },
-})
+});
 
-export default FamilyTree
+export default FamilyTree;

@@ -1,6 +1,6 @@
-import mongoose from 'mongoose'
-import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 const UserSchema = new mongoose.Schema({
   number: {
@@ -34,12 +34,11 @@ const UserSchema = new mongoose.Schema({
     trim: true,
     // this field won't be there, when a user creates their own profile, so not required
   },
-
   gender: {
     type: String,
-    minlength: 4,
-    maxlength: 6,
-    trim: true,
+    required: true,
+    enum: ['Male', 'Female'],
+    default: 'Male',
   },
   address: {
     type: String,
@@ -81,7 +80,7 @@ const UserSchema = new mongoose.Schema({
     type: [String], // array of _ids
     validate: {
       validator: function (value) {
-        return value.length <= 20 // Limit the array to 20 siblings
+        return value.length <= 20; // Limit the array to 20 siblings
       },
       message: 'A user can have at most 20 siblings.',
     },
@@ -90,24 +89,24 @@ const UserSchema = new mongoose.Schema({
     type: [String], // array of _ids
     validate: {
       validator: function (value) {
-        return value.length <= 20 // Limit the array to 20 children
+        return value.length <= 20; // Limit the array to 20 children
       },
       message: 'A user can have at most 20 children.',
     },
   },
-})
+});
 
 UserSchema.pre('save', async function () {
-  if (!this.isModified('password')) return //don't want to hash pass again for updateUser
-  const salt = await bcrypt.genSalt(10)
-  this.password = await bcrypt.hash(this.password, salt)
+  if (!this.isModified('password')) return; //don't want to hash pass again for updateUser
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
   //this 'await has no effect' warning is related to linting or TypeScript rules
-})
+});
 
 UserSchema.methods.createJWT = function () {
   return jwt.sign({ userId: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_LIFETIME,
-  })
-}
+  });
+};
 
-export default mongoose.model('User', UserSchema)
+export default mongoose.model('User', UserSchema);

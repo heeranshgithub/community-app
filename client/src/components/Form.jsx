@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import {
   Text,
   TextInput,
@@ -6,20 +6,20 @@ import {
   View,
   Alert,
   StyleSheet,
-} from 'react-native'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import Colors from '../theme/Colors'
+} from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Colors from '../theme/Colors';
 
 const Form = () => {
-  const [name, setName] = useState('')
-  const [number, setNumber] = useState('')
-  const [address, setAddress] = useState('')
-  const [familyHead, setFamilyHead] = useState('')
-  const [age, setAge] = useState('')
-  const [gender, setGender] = useState('')
-  const [education, setEducation] = useState('')
-  const [company, setCompany] = useState('')
-  const [about, setAbout] = useState('')
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
+  const [address, setAddress] = useState('');
+  const [familyHead, setFamilyHead] = useState('');
+  const [age, setAge] = useState('');
+  const [gender, setGender] = useState('');
+  const [education, setEducation] = useState('');
+  const [company, setCompany] = useState('');
+  const [about, setAbout] = useState('');
 
   const handleSubmit = () => {
     if (
@@ -33,98 +33,98 @@ const Form = () => {
       company &&
       about
     ) {
-      Alert.alert('Form Submitted', `Details updated.`)
+      Alert.alert('Form Submitted', `Details updated.`);
     } else {
-      Alert.alert('Error', 'Please fill out all fields.')
+      Alert.alert('Error', 'Please fill out all fields.');
     }
-  }
+  };
 
   return (
     <KeyboardAwareScrollView
       style={styles.container}
       contentContainerStyle={styles.contentContainer}
-      keyboardShouldPersistTaps="handled"
+      keyboardShouldPersistTaps='handled'
       enableOnAndroid={true}
     >
       <View style={styles.formContainer}>
         <Text style={styles.title}>Edit Details</Text>
         <TextInput
           style={styles.input}
-          placeholder="Name"
+          placeholder='Name'
           value={name}
           onChangeText={setName}
-          placeholderTextColor="#96a2b5"
+          placeholderTextColor='#96a2b5'
         />
         <TextInput
           style={styles.input}
-          placeholder="Number"
+          placeholder='Number'
           value={number}
           onChangeText={setNumber}
-          keyboardType="numeric"
-          placeholderTextColor="#96a2b5"
+          keyboardType='numeric'
+          placeholderTextColor='#96a2b5'
         />
         <TextInput
           style={styles.input}
-          placeholder="Address"
+          placeholder='Address'
           value={address}
           onChangeText={setAddress}
-          placeholderTextColor="#96a2b5"
+          placeholderTextColor='#96a2b5'
         />
         <TextInput
           style={styles.input}
-          placeholder="Family Head"
+          placeholder='Family Head'
           value={familyHead}
           onChangeText={setFamilyHead}
-          placeholderTextColor="#96a2b5"
+          placeholderTextColor='#96a2b5'
         />
         <TextInput
           style={styles.input}
-          placeholder="Age"
+          placeholder='Age'
           value={age}
           onChangeText={setAge}
-          placeholderTextColor="#96a2b5"
+          placeholderTextColor='#96a2b5'
         />
         <TextInput
           style={styles.input}
-          placeholder="Gender"
+          placeholder='Gender'
           value={gender}
           onChangeText={setGender}
-          placeholderTextColor="#96a2b5"
+          placeholderTextColor='#96a2b5'
         />
         <TextInput
           style={styles.input}
-          placeholder="Education"
+          placeholder='Education'
           value={education}
           onChangeText={setEducation}
-          placeholderTextColor="#96a2b5"
+          placeholderTextColor='#96a2b5'
         />
         <TextInput
           style={styles.input}
-          placeholder="Company"
+          placeholder='Company'
           value={company}
           onChangeText={setCompany}
-          placeholderTextColor="#96a2b5"
+          placeholderTextColor='#96a2b5'
         />
         <TextInput
           style={[styles.input, styles.textArea]}
-          placeholder="About"
+          placeholder='About'
           value={about}
           onChangeText={setAbout}
           multiline={true}
-          placeholderTextColor="#96a2b5"
+          placeholderTextColor='#96a2b5'
         />
         <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
           <Text style={styles.submitButtonText}>Submit</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAwareScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.bgColor,
+    backgroundColor: Colors.bgDarkBlue,
     paddingTop: 44,
   },
   contentContainer: {
@@ -151,7 +151,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: Colors.borderColor,
     shadowColor: 'black',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
@@ -173,6 +172,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-})
+});
 
-export default Form
+export default Form;

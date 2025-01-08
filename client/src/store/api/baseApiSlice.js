@@ -1,22 +1,23 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const currBaseURL = 'http://localhost:5001/api/v1/'
+const currBaseSimURL = 'http://10.0.2.2:5000/api/v1/';
+// const currBaseIPURl = ' http://192.168.1.103:5000/api/v1/';
 
 const baseApiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl: currBaseURL,
+    baseUrl: currBaseSimURL,
     prepareHeaders: async (headers, { getState }) => {
-      headers.set('Content-Type', 'application/json')
-      const token = getState()?.user?.accessToken
+      headers.set('Content-Type', 'application/json');
+      const token = getState()?.user?.token;
 
       if (token) {
-        headers.set('Authorization', `Bearer ${token}`)
+        headers.set('Authorization', `Bearer ${token}`);
       }
-      return headers
+      return headers;
     },
   }),
-  endpoints: () => {},
-})
+  endpoints: () => ({}),
+});
 
-export default baseApiSlice
+export default baseApiSlice;
