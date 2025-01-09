@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
   View,
   TextInput,
@@ -6,41 +6,41 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
-} from 'react-native';
-import Colors from '../theme/Colors';
-import { useDispatch } from 'react-redux';
-import { useRegisterUserMutation } from '../store/api/userApiSlice';
-import { setUser } from '../store/slices/userSlice';
-import DropDownPicker from 'react-native-dropdown-picker';
+} from 'react-native'
+import Colors from '../theme/Colors'
+import { useDispatch } from 'react-redux'
+import { useRegisterUserMutation } from '../store/api/userApiSlice'
+import { setUser } from '../store/slices/userSlice'
+import DropDownPicker from 'react-native-dropdown-picker'
 
 const Register = () => {
-  const [number, setNumber] = useState('');
-  const [name, setName] = useState('');
-  const [gender, setGender] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [number, setNumber] = useState('')
+  const [name, setName] = useState('')
+  const [gender, setGender] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
-  const [registerUser] = useRegisterUserMutation();
+  const [registerUser] = useRegisterUserMutation()
 
   const handleRegister = async () => {
     if (!name || !number || !gender || !password || !confirmPassword) {
-      Alert.alert('Error', 'All fields are required!');
-      return;
+      Alert.alert('Error', 'All fields are required!')
+      return
     }
 
     if (password !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match!');
-      return;
+      Alert.alert('Error', 'Passwords do not match!')
+      return
     }
 
     try {
-      const userData = { name, number, gender, password };
-      const res = await registerUser(userData).unwrap();
-
+      const userData = { name, number, gender, password }
+      const res = await registerUser(userData).unwrap()
+      // console.log('res from Register: ', res)
       dispatch(
         setUser({
           token: res?.user?.token,
@@ -49,13 +49,13 @@ const Register = () => {
           gender: res?.user?.gender,
           id: res?.user?.id,
         })
-      );
-      Alert.alert('Success', 'User registered successfully!');
+      )
+      Alert.alert('Success', 'User registered successfully!')
     } catch (error) {
-      console.log(error);
-      Alert.alert('Error', 'Registration failed. Please try again.');
+      console.log(error)
+      Alert.alert('Error', 'Registration failed. Please try again.')
     }
-  };
+  }
 
   return (
     <View style={styles.container}>
@@ -63,7 +63,7 @@ const Register = () => {
 
       <TextInput
         style={styles.input}
-        placeholder='Name'
+        placeholder="Name"
         value={name}
         onChangeText={setName}
         placeholderTextColor={Colors.inputPlaceholder} // Setting the placeholder color
@@ -71,8 +71,8 @@ const Register = () => {
 
       <TextInput
         style={styles.input}
-        placeholder='Enter Phone Number'
-        keyboardType='phone-pad'
+        placeholder="Enter Phone Number"
+        keyboardType="phone-pad"
         value={number}
         onChangeText={setNumber}
         placeholderTextColor={Colors.inputPlaceholder} // Setting the placeholder color
@@ -88,14 +88,14 @@ const Register = () => {
         setOpen={setOpen}
         setValue={setGender}
         style={styles.input}
-        placeholder='Select Gender'
+        placeholder="Select Gender"
         placeholderStyle={styles.placeholderStyle} // Ensuring the placeholder color is the same
         dropDownStyle={{ backgroundColor: '#fff' }}
       />
 
       <TextInput
         style={styles.input}
-        placeholder='Set Password'
+        placeholder="Set Password"
         secureTextEntry
         value={password}
         onChangeText={setPassword}
@@ -104,7 +104,7 @@ const Register = () => {
 
       <TextInput
         style={styles.input}
-        placeholder='Confirm Password'
+        placeholder="Confirm Password"
         secureTextEntry
         value={confirmPassword}
         onChangeText={setConfirmPassword}
@@ -115,8 +115,8 @@ const Register = () => {
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -164,6 +164,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-});
+})
 
-export default Register;
+export default Register
