@@ -18,6 +18,7 @@ const baseApiSlice = createApi({
     },
   }),
   endpoints: () => ({}),
+  tagTypes: ['Tree'],
 });
 
 export default baseApiSlice;

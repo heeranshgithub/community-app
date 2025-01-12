@@ -3,6 +3,6 @@ import { getTree } from '../controllers/treeController.js';
 
 const router = express.Router();
 
-router.route('/:id').get(getTree);
+router.route('/:treeId').get(getTree);
 
 export default router;

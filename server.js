@@ -17,7 +17,7 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
 }
 
-app.use('/api/v1/trees', authenticateUser, treeRouter); // have to change this url
+app.use('/api/v1/tree', authenticateUser, treeRouter);
 app.use('/api/v1/user', userRouter);
 
 app.use(errorHandlerMiddleware);

@@ -1,4 +1,4 @@
-braimport { UnAuthenticatedError } from '../errors/index.js';
+import { UnAuthenticatedError } from '../errors/index.js';
 import jwt from 'jsonwebtoken';
 
 const auth = async (req, res, next) => {

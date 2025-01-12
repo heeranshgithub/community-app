@@ -31,6 +31,6 @@ const userSlice = createSlice({
 });
 
 export const { setUser, clearUser } = userSlice.actions;
-export const getCurrentUserToken = (state) => state?.user?.token;
+export const getUserToken = (state) => state?.user?.token;
 
 export default userSlice.reducer;

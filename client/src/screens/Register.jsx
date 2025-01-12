@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux';
 import { useRegisterUserMutation } from '../store/api/userApiSlice';
 import { setUser } from '../store/slices/userSlice';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { setTreeId } from '../store/slices/treeSlice';
 
 const Register = () => {
   const [number, setNumber] = useState('');
@@ -50,6 +51,8 @@ const Register = () => {
           id: res?.user?.id,
         })
       );
+      dispatch(setTreeId(res?.user?.id));
+
       Alert.alert('Success', 'User registered successfully!');
     } catch (error) {
       console.log(error);

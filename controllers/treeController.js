@@ -3,7 +3,7 @@ import { NotFoundError } from '../errors/index.js';
 import { StatusCodes } from 'http-status-codes';
 
 const getTree = async (req, res) => {
-  const _id = req.params.id;
+  const _id = req.params.treeId;
   const tree = await User.findOne({ _id });
 
   if (!tree) throw new NotFoundError('Tree not found!');
