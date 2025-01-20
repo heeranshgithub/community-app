@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   TextInput,
   Text,
   TouchableOpacity,
   StyleSheet,
-  Alert,
 } from 'react-native';
-import Colors from '../theme/Colors';
+import Colors from '../../theme/Colors';
 import { useDispatch } from 'react-redux';
-import { useRegisterUserMutation } from '../store/api/userApiSlice';
-import { setUser } from '../store/slices/userSlice';
+import { useRegisterUserMutation } from '../../store/api/userApiSlice';
+import { getUserToken, setUser } from '../../store/slices/userSlice';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { setTreeId } from '../store/slices/treeSlice';
+import { setTreeId } from '../../store/slices/treeSlice';
 
 const Register = () => {
   const [number, setNumber] = useState('');
@@ -20,7 +19,6 @@ const Register = () => {
   const [gender, setGender] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
   const [open, setOpen] = useState(false);
 
   const dispatch = useDispatch();

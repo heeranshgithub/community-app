@@ -1,0 +1,12 @@
+Babel
+Babel, a JavaScript compiler. It defines how Babel should transform your modern JavaScript (ES6+) code into older JavaScript 
+that can run in environments that may not support the latest JavaScript features.
+babel.config.js is a configuration file for Babel
+----
+Metro is the JavaScript bundler and packager that comes with React Native (and Expo) projects. 
+Its primary role is to take your JavaScript code and assets (like images and fonts), transform them if needed, 
+and package them into a format that can be understood and executed by the device or simulator.
+In an Expo project, Metro's major role is to:
+Metro bundles your app’s JavaScript code into one or more files, which are then loaded onto the device.
+It takes care of dependencies, resolving imports, and ensuring that the right code is sent to the device.
+--------

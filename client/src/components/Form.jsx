@@ -4,13 +4,13 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Modal,
   Alert,
-  StyleSheet,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Colors from '../theme/Colors';
 
-const Form = () => {
+const AddFamilyMemberModal = ({ visible, onClose }) => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
   const [address, setAddress] = useState('');
@@ -33,145 +33,159 @@ const Form = () => {
       company &&
       about
     ) {
-      Alert.alert('Form Submitted', `Details updated.`);
+      Alert.alert('Success', 'Family member added successfully', [
+        {
+          text: 'OK',
+          onPress: () => {
+            clearForm();
+            onClose();
+          },
+        },
+      ]);
     } else {
       Alert.alert('Error', 'Please fill out all fields.');
     }
   };
 
+  const clearForm = () => {
+    setName('');
+    setNumber('');
+    setAddress('');
+    setFamilyHead('');
+    setAge('');
+    setGender('');
+    setEducation('');
+    setCompany('');
+    setAbout('');
+  };
+
   return (
-    <KeyboardAwareScrollView
-      style={styles.container}
-      contentContainerStyle={styles.contentContainer}
-      keyboardShouldPersistTaps='handled'
-      enableOnAndroid={true}
+    <Modal
+      animationType='slide'
+      transparent={true}
+      visible={visible}
+      onRequestClose={onClose}
     >
-      <View style={styles.formContainer}>
-        <Text style={styles.title}>Edit Details</Text>
-        <TextInput
-          style={styles.input}
-          placeholder='Name'
-          value={name}
-          onChangeText={setName}
-          placeholderTextColor='#96a2b5'
-        />
-        <TextInput
-          style={styles.input}
-          placeholder='Number'
-          value={number}
-          onChangeText={setNumber}
-          keyboardType='numeric'
-          placeholderTextColor='#96a2b5'
-        />
-        <TextInput
-          style={styles.input}
-          placeholder='Address'
-          value={address}
-          onChangeText={setAddress}
-          placeholderTextColor='#96a2b5'
-        />
-        <TextInput
-          style={styles.input}
-          placeholder='Family Head'
-          value={familyHead}
-          onChangeText={setFamilyHead}
-          placeholderTextColor='#96a2b5'
-        />
-        <TextInput
-          style={styles.input}
-          placeholder='Age'
-          value={age}
-          onChangeText={setAge}
-          placeholderTextColor='#96a2b5'
-        />
-        <TextInput
-          style={styles.input}
-          placeholder='Gender'
-          value={gender}
-          onChangeText={setGender}
-          placeholderTextColor='#96a2b5'
-        />
-        <TextInput
-          style={styles.input}
-          placeholder='Education'
-          value={education}
-          onChangeText={setEducation}
-          placeholderTextColor='#96a2b5'
-        />
-        <TextInput
-          style={styles.input}
-          placeholder='Company'
-          value={company}
-          onChangeText={setCompany}
-          placeholderTextColor='#96a2b5'
-        />
-        <TextInput
-          style={[styles.input, styles.textArea]}
-          placeholder='About'
-          value={about}
-          onChangeText={setAbout}
-          multiline={true}
-          placeholderTextColor='#96a2b5'
-        />
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-          <Text style={styles.submitButtonText}>Submit</Text>
-        </TouchableOpacity>
+      <View className='flex-1 bg-black/50'>
+        <View className='flex-1 bg-[#1a2c4d] mt-10 rounded-t-3xl'>
+          <KeyboardAwareScrollView
+            className='flex-1 px-5 pt-6'
+            contentContainerStyle={{ paddingBottom: 30 }}
+            keyboardShouldPersistTaps='handled'
+            enableOnAndroid={true}
+          >
+            <View className='flex-row justify-between items-center mb-6'>
+              <Text className='text-white text-2xl font-bold'>
+                Add Family Member
+              </Text>
+              <TouchableOpacity
+                onPress={onClose}
+                className='p-2 rounded-full bg-gray-700'
+              >
+                <Text className='text-white text-lg'>✕</Text>
+              </TouchableOpacity>
+            </View>
+
+            <TextInput
+              className='bg-white rounded-lg px-4 py-3 text-base mb-4 shadow-sm'
+              placeholder='Name'
+              value={name}
+              onChangeText={setName}
+              placeholderTextColor='#96a2b5'
+            />
+
+            <TextInput
+              className='bg-white rounded-lg px-4 py-3 text-base mb-4 shadow-sm'
+              placeholder='Number'
+              value={number}
+              onChangeText={setNumber}
+              keyboardType='numeric'
+              placeholderTextColor='#96a2b5'
+            />
+
+            <TextInput
+              className='bg-white rounded-lg px-4 py-3 text-base mb-4 shadow-sm'
+              placeholder='Address'
+              value={address}
+              onChangeText={setAddress}
+              placeholderTextColor='#96a2b5'
+            />
+
+            <TextInput
+              className='bg-white rounded-lg px-4 py-3 text-base mb-4 shadow-sm'
+              placeholder='Family Head'
+              value={familyHead}
+              onChangeText={setFamilyHead}
+              placeholderTextColor='#96a2b5'
+            />
+
+            <TextInput
+              className='bg-white rounded-lg px-4 py-3 text-base mb-4 shadow-sm'
+              placeholder='Age'
+              value={age}
+              onChangeText={setAge}
+              keyboardType='numeric'
+              placeholderTextColor='#96a2b5'
+            />
+
+            <TextInput
+              className='bg-white rounded-lg px-4 py-3 text-base mb-4 shadow-sm'
+              placeholder='Gender'
+              value={gender}
+              onChangeText={setGender}
+              placeholderTextColor='#96a2b5'
+            />
+
+            <TextInput
+              className='bg-white rounded-lg px-4 py-3 text-base mb-4 shadow-sm'
+              placeholder='Education'
+              value={education}
+              onChangeText={setEducation}
+              placeholderTextColor='#96a2b5'
+            />
+
+            <TextInput
+              className='bg-white rounded-lg px-4 py-3 text-base mb-4 shadow-sm'
+              placeholder='Company'
+              value={company}
+              onChangeText={setCompany}
+              placeholderTextColor='#96a2b5'
+            />
+
+            <TextInput
+              className='bg-white rounded-lg px-4 py-3 text-base mb-4 shadow-sm h-24'
+              placeholder='About'
+              value={about}
+              onChangeText={setAbout}
+              multiline={true}
+              textAlignVertical='top'
+              placeholderTextColor='#96a2b5'
+            />
+
+            <View className='flex-row gap-4 mt-4'>
+              <TouchableOpacity
+                className='flex-1 bg-gray-500 py-3 rounded-lg'
+                onPress={onClose}
+              >
+                <Text className='text-white text-center text-base font-bold'>
+                  Cancel
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                className='flex-1 bg-blue-500 py-3 rounded-lg'
+                onPress={handleSubmit}
+              >
+                <Text className='text-white text-center text-base font-bold'>
+                  Add Member
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </KeyboardAwareScrollView>
+        </View>
       </View>
-    </KeyboardAwareScrollView>
+    </Modal>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.bgDarkBlue,
-    paddingTop: 44,
-  },
-  contentContainer: {
-    flexGrow: 1,
-    padding: 20,
-    paddingBottom: 30,
-  },
-  formContainer: {
-    width: '100%',
-  },
-  title: {
-    color: 'white',
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
-    marginTop: 10,
-  },
-  input: {
-    backgroundColor: 'white',
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    fontSize: 16,
-    marginBottom: 16,
-    borderWidth: 1,
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 1,
-  },
-  textArea: {
-    height: 100,
-    textAlignVertical: 'top',
-  },
-  submitButton: {
-    backgroundColor: Colors.submitButtonBlue,
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginTop: 16,
-  },
-  submitButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-});
-
-export default Form;
+export default AddFamilyMemberModal;

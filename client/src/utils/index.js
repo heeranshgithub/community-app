@@ -1,3 +1,4 @@
+import { secureStorage } from './secureStorage';
 const sampleUserData = {
   name: 'Mohandas',
   gender: 'Male',
@@ -21,4 +22,4 @@ const sampleUserData = {
   ],
 };
 
-export { sampleUserData };
+export { sampleUserData, secureStorage };

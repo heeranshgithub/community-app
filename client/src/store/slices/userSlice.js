@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { secureStorage } from '../../utils';
 
 const initialState = {
   token: null,
@@ -13,11 +14,15 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      state.token = action.payload.token; // Immer taking care of immutability under the hood
-      state.name = action.payload.name;
-      state.number = action.payload.number;
-      state.gender = action.payload.gender;
-      state.id = action.payload.id;
+      const { token, name, number, gender, id } = action.payload;
+      state.token = token; // Immer taking care of immutability under the hood
+      state.id = id;
+      state.name = name;
+      state.number = number;
+      state.gender = gender;
+
+      secureStorage.saveUserToken(token);
+      secureStorage.saveUserId(id);
     },
 
     clearUser: (state) => {
@@ -26,6 +31,8 @@ const userSlice = createSlice({
       state.number = '';
       state.gender = '';
       state.id = '';
+
+      secureStorage.clearUserData();
     },
   },
 });
