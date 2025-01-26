@@ -10,6 +10,7 @@ const treeSlice = createSlice({
   reducers: {
     setTreeId: (state, action) => {
       state.treeId = action.payload; // Immer taking care of immutability under the hood
+      // action.payload is the treeId here (only one value getting passed)
     },
   },
 });

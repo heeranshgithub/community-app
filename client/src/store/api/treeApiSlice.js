@@ -10,17 +10,17 @@ export const treeApiSlice = baseApiSlice.injectEndpoints({
       }),
       providesTags: (result, error, treeId) => [{ type: 'Tree', treeId }], // Associate the tag with the query
     }),
-    updateTree: builder.mutation({
-      query: ({ treeId, data }) => ({
-        url: `/tree/${treeId}`,
-        method: 'PATCH',
-        body: data,
+    postTree: builder.mutation({
+      query: ({ creatorTreeId, treeData }) => ({
+        url: `/tree`,
+        method: 'POST',
+        body: treeData,
       }),
-      invalidatesTags: (result, error, { treeId }) => [
-        { type: 'Tree', treeId },
+      invalidatesTags: (result, error, { creatorTreeId }) => [
+        { type: 'Tree', creatorTreeId },
       ], // Invalidate the specific tag
     }),
   }),
 });
 
-export const { useGetTreeQuery, useUpdateTreeMutation } = treeApiSlice;
+export const { useGetTreeQuery, usePostTreeMutation } = treeApiSlice;

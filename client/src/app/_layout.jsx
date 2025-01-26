@@ -14,28 +14,28 @@ const AuthWrapper = () => {
   const userToken = useSelector(getUserToken);
 
   useEffect(() => {
-    // const inAuthGroup = segments[0] === '(auth)';
-    // const initializeAuth = async () => { //method setting user token and user id into user slice when the app opens
-    //   try {
-    //     const [userToken, userId] = await Promise.all([
-    //       secureStorage.getUserToken(),
-    //       secureStorage.getUserId(),
-    //     ]);
-    //     if (userToken && userId)
-    //       dispatch(setUser({ id: userId, token: userToken }));
-    //   } catch (error) {
-    //     console.error('Error initializing auth:', error);
-    //   }
-    // };
-    // if (!userToken) initializeAuth();
-    // if (!userToken && !inAuthGroup) {
-    //   // Redirect to register if no token and not already in auth group
-    //   router.replace('/register');
-    // } else if (userToken && inAuthGroup) {
-    //   // Redirect to family-tree if has token but still in auth group
-    //   router.replace('/family-tree');
-    // }
-    router.replace('/family-tree');
+    const inAuthGroup = segments[0] === '(auth)';
+    const initializeAuth = async () => {
+      //method setting user token and user id into user slice when the app opens
+      try {
+        const [userToken, userId] = await Promise.all([
+          secureStorage.getUserToken(),
+          secureStorage.getUserId(),
+        ]);
+        if (userToken && userId)
+          dispatch(setUser({ id: userId, token: userToken }));
+      } catch (error) {
+        console.error('Error initializing auth:', error);
+      }
+    };
+    if (!userToken) initializeAuth();
+    if (!userToken && !inAuthGroup) {
+      // Redirect to register if no token and not already in auth group
+      router.replace('/register');
+    } else if (userToken && inAuthGroup) {
+      // Redirect to family-tree if has token but still in auth group
+      router.replace('/family-tree');
+    }
   }, [userToken, segments]);
 
   return <Slot />;

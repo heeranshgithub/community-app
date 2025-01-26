@@ -6,8 +6,8 @@ const currBaseIPURl = ' http://172.16.23.241:5000/api/v1/';
 const baseApiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    // baseUrl: currBaseSimURL,
-    baseUrl: currBaseIPURl,
+    baseUrl: currBaseSimURL,
+    // baseUrl: currBaseIPURl,
     prepareHeaders: async (headers, { getState }) => {
       headers.set('Content-Type', 'application/json');
       const token = getState()?.user?.token;

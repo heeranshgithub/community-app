@@ -6,11 +6,11 @@ const sampleUserData = {
   father: 'Karamchand',
   mother: 'Putlibai',
   siblings: [
-    { gender: 'Female', childName: 'Raliatbehn' },
-    { gender: 'Male', childName: 'Laxmidas' },
-    { gender: 'Female', childName: 'Muliben' },
-    { gender: 'Male', childName: 'Karsandas' },
-    { gender: 'Female', childName: 'Pankunvarben' },
+    { gender: 'Female', siblingName: 'Raliatbehn' },
+    { gender: 'Male', siblingName: 'Laxmidas' },
+    { gender: 'Female', siblingName: 'Muliben' },
+    { gender: 'Male', siblingName: 'Karsandas' },
+    { gender: 'Female', siblingName: 'Pankunvarben' },
   ],
   children: [
     { gender: 'Male', childName: 'Harilal' },

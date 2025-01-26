@@ -40,6 +40,9 @@ const UserSchema = new mongoose.Schema({
     enum: ['Male', 'Female'],
     default: 'Male',
   },
+  dob: {
+    type: String, // ISOString
+  },
   address: {
     type: String,
     minlength: 3,
@@ -58,22 +61,22 @@ const UserSchema = new mongoose.Schema({
     maxlength: 20,
     trim: true,
   },
+  about: {
+    type: String,
+    minlength: 1,
+    maxlength: 200,
+    trim: true,
+  },
   father: {
-    type: String, // will just save their _id, length of _id is 24
-    minlength: 24,
-    maxlength: 24,
+    type: String, // will save their _id and name
     trim: true,
   },
   mother: {
-    type: String, // will just save their _id,length of _id is 24
-    minlength: 24,
-    maxlength: 24,
+    type: String, // will save their _id and name
     trim: true,
   },
   spouse: {
-    type: String, // will just save their _id, length of _id is 24
-    minlength: 24,
-    maxlength: 24,
+    type: String, // will save their _id and name
     trim: true,
   },
   siblings: {
@@ -107,6 +110,11 @@ UserSchema.methods.createJWT = function () {
   return jwt.sign({ userId: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_LIFETIME,
   });
+};
+
+UserSchema.methods.comparePassword = async function (candidatePassword) {
+  const isMatch = await bcrypt.compare(candidatePassword, this.password);
+  return isMatch;
 };
 
 export default mongoose.model('User', UserSchema);

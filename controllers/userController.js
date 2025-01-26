@@ -4,7 +4,6 @@ import { StatusCodes } from 'http-status-codes';
 
 const register = async (req, res) => {
   const { name, number, gender, password } = req.body;
-  console.log(req.body);
 
   if (!name || !number || !gender || !password)
     throw new BadRequestError('Please provide all values!');
@@ -30,4 +29,27 @@ const register = async (req, res) => {
   });
 };
 
-export { register };
+const login = async (req, res) => {
+  const { number, password } = req.body;
+  if (!number || !password)
+    throw new BadRequestError('Please provide all values!');
+
+  const user = await User.findOne({ number }).select('+password');
+  if (!user) throw new BadRequestError('Invalid Credentials!');
+  const isPasswordCorrect = await user.comparePassword(password);
+  if (!isPasswordCorrect) throw new BadRequestError('Invalid Credentials!');
+
+  const token = user.createJWT();
+  user.password = undefined;
+  res.status(StatusCodes.OK).json({
+    user: {
+      name: user.name,
+      number: user.number,
+      gender: user.gender,
+      token,
+      id: user._id,
+    },
+  });
+};
+
+export { register, login };
