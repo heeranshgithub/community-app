@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { useState } from 'react';
+import { View, Text, TouchableOpacity, Platform } from 'react-native';
 import { useGetTreeQuery } from '../../store/api/treeApiSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCurrentTreeId } from '../../store/slices/treeSlice';
-// import { sampleUserData as userDataW } from '../../utils';
-import Form from '../../components/FormModal';
+import FormModal from '../../components/FormModal';
 import { clearUser, getUserId } from '../../store/slices/userSlice';
 import DetailsModal from '../../components/DetailsModal';
 
 const FamilyTree = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [formModalVisible, setFormModalVisible] = useState(false);
+  const [detailsModalVisible, setDetailsModalVisible] = useState(false);
+  const [selectedMemberId, setSelectedMemberId] = useState('');
+  const [selectedMemberRelation, setSelectedMemberRelation] = useState(null);
   const dispatch = useDispatch();
+
   let treeId = useSelector(getCurrentTreeId);
   const loggedInUserId = useSelector(getUserId);
   if (!treeId) treeId = loggedInUserId;
@@ -22,8 +25,6 @@ const FamilyTree = () => {
     isSuccess,
     isError,
   } = useGetTreeQuery(treeId);
-
-  console.log(userData);
 
   // Helper to chunk children and siblings into rows of 3
   const chunkArray = (arr, size) => {
@@ -38,57 +39,90 @@ const FamilyTree = () => {
   const childrenChunks = chunkArray(userData?.children || [], 3);
 
   return (
-    <View className='relative flex-1 justify-center items-center bg-gray-200'>
-      <TouchableOpacity className='absolute top-8 left-6 h-[40px] w-[100px] bg-blue-400 justify-center items-center rounded-md'>
-        <Text className='font-bold text-black text-xl'>My Profile</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        className='absolute top-8 right-6 h-[40px] w-[200px] bg-blue-700 justify-center items-center rounded-md'
-        onPress={() => setIsModalVisible(true)}
-      >
-        <Text className='font-bold text-white text-xl'>Add Family Member</Text>
-      </TouchableOpacity>
+    <View className='flex-1 bg-[#1a2c4d] px-4'>
+      {/* Header section for buttons */}
+      <View className={`w-full flex-row justify-between py-2`}>
+        <TouchableOpacity
+          className={`bg-blue-400 justify-center items-center rounded-md ${
+            Platform.OS === 'ios' ? 'px-2 py-2' : 'px-4 py-2'
+          }`}
+          onPress={() => {
+            setSelectedMemberId(treeId);
+            setSelectedMemberRelation(null);
+            setDetailsModalVisible(true);
+          }}
+        >
+          <Text className='font-bold text-black text-xl'>My Profile</Text>
+        </TouchableOpacity>
 
-      {/* <Form
-        visible={isModalVisible}
-        onClose={() => setIsModalVisible(false)}
+        <TouchableOpacity
+          className={`bg-blue-400 justify-center items-center rounded-md ${
+            Platform.OS === 'ios' ? 'px-2 py-2' : 'px-4 py-2'
+          }`}
+          onPress={() => setFormModalVisible(true)}
+        >
+          <Text className='font-bold text-white text-xl'>
+            Add Family Member
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <FormModal
+        visible={formModalVisible}
+        onClose={() => setFormModalVisible(false)}
         creatorTreeId={treeId}
-      /> */}
+      />
+
       <DetailsModal
-        visible={isModalVisible}
-        onClose={() => setIsModalVisible(false)}
-        personId='6794bedd78ce7c31e828b5e6'
+        visible={detailsModalVisible}
+        onClose={() => setDetailsModalVisible(false)}
+        personId={selectedMemberId}
+        relation={selectedMemberRelation}
       />
 
       {userData?.name ? (
-        <View>
+        <View className='flex-1 justify-center items-center'>
           {/* Parents */}
           <View className='mb-9'>
-            <Text className='text-xl font-bold text-center text-gray-800 mb-2'>
+            <Text className='text-xl font-bold text-center text-white mb-2'>
               Father and Mother
             </Text>
             <View className='flex-row justify-center gap-x-4'>
               {userData?.father && (
-                <View className='p-3 rounded-lg bg-blue-500 shadow-lg'>
+                <TouchableOpacity
+                  className='p-3 rounded-lg bg-blue-500 shadow-lg'
+                  onPress={() => {
+                    setSelectedMemberId(userData?.father.split('-')[0]);
+                    setSelectedMemberRelation('Father');
+                    setDetailsModalVisible(true);
+                  }}
+                >
                   <Text className='text-white text-lg'>
                     {userData?.father.split('-')[1]}
                   </Text>
-                </View>
+                </TouchableOpacity>
               )}
 
               {userData?.mother && (
-                <View className='p-3 rounded-lg bg-pink-400 shadow-lg'>
+                <TouchableOpacity
+                  className='p-3 rounded-lg bg-pink-400 shadow-lg'
+                  onPress={() => {
+                    setSelectedMemberId(userData?.mother.split('-')[0]);
+                    setSelectedMemberRelation('Mother');
+                    setDetailsModalVisible(true);
+                  }}
+                >
                   <Text className='text-white text-lg'>
                     {userData?.mother.split('-')[1]}
                   </Text>
-                </View>
+                </TouchableOpacity>
               )}
             </View>
           </View>
 
           {/* Siblings */}
           <View className='mb-9'>
-            <Text className='text-xl font-bold text-center text-gray-800 mb-2'>
+            <Text className='text-xl font-bold text-center text-white mb-2'>
               Siblings
             </Text>
             {userData.siblings &&
@@ -98,18 +132,23 @@ const FamilyTree = () => {
                   className='flex-row justify-center gap-x-4 mb-4'
                 >
                   {(chunk || []).map((sibling, index) => (
-                    <View
+                    <TouchableOpacity
                       key={index}
                       className={`p-3 rounded-lg shadow-lg ${
                         sibling?.split('-')[2] === 'Male'
                           ? 'bg-blue-500'
                           : 'bg-pink-400'
                       }`}
+                      onPress={() => {
+                        setSelectedMemberId(sibling?.split('-')[0]);
+                        setSelectedMemberRelation('Sibling');
+                        setDetailsModalVisible(true);
+                      }}
                     >
                       <Text className='text-white text-lg'>
                         {sibling?.split('-')[1]}
                       </Text>
-                    </View>
+                    </TouchableOpacity>
                   ))}
                 </View>
               ))}
@@ -117,35 +156,45 @@ const FamilyTree = () => {
 
           {/* User and Spouse */}
           <View className='mb-9'>
-            <Text className='text-xl font-bold text-center text-gray-800 mb-2'>
+            <Text className='text-xl font-bold text-center text-white mb-2'>
               You and Spouse
             </Text>
             <View className='flex-row justify-center gap-x-4'>
-              {/* No conditional here, because if there's userData, there's going to be a name */}
-              <View
+              {/* User */}
+              <TouchableOpacity
                 className={`p-3 rounded-lg shadow-lg ${
                   userData?.gender === 'Male' ? 'bg-blue-500' : 'bg-pink-400'
                 }`}
+                onPress={() => {
+                  setSelectedMemberId(userData?.id);
+                  setSelectedMemberRelation(null);
+                  setDetailsModalVisible(true);
+                }}
               >
                 <Text className='text-white text-lg'>{userData?.name}</Text>
-              </View>
+              </TouchableOpacity>
               {userData?.spouse && (
-                <View
+                <TouchableOpacity
                   className={`p-3 rounded-lg shadow-lg ${
                     userData?.gender === 'Male' ? 'bg-pink-400' : 'bg-blue-500'
                   }`}
+                  onPress={() => {
+                    setSelectedMemberId(userData?.spouse.split('-')[0]);
+                    setSelectedMemberRelation('Spouse');
+                    setDetailsModalVisible(true);
+                  }}
                 >
                   <Text className='text-white text-lg'>
                     {userData?.spouse.split('-')[1]}
                   </Text>
-                </View>
+                </TouchableOpacity>
               )}
             </View>
           </View>
 
           {/* Children */}
           <View className='mb-9'>
-            <Text className='text-xl font-bold text-center text-gray-800 mb-2'>
+            <Text className='text-xl font-bold text-center text-white mb-2'>
               Children
             </Text>
             {userData?.children &&
@@ -155,18 +204,23 @@ const FamilyTree = () => {
                   className='flex-row justify-center gap-x-4 mb-4'
                 >
                   {(chunk || []).map((child, index) => (
-                    <View
+                    <TouchableOpacity
                       key={index}
                       className={`p-3 rounded-lg shadow-lg ${
                         child?.split('-')[2] === 'Male'
                           ? 'bg-blue-500'
                           : 'bg-pink-400'
                       }`}
+                      onPress={() => {
+                        setSelectedMemberId(child?.split('-')[0]);
+                        setSelectedMemberRelation('Child');
+                        setDetailsModalVisible(true);
+                      }}
                     >
                       <Text className='text-white text-lg'>
                         {child?.split('-')[1]}
                       </Text>
-                    </View>
+                    </TouchableOpacity>
                   ))}
                 </View>
               ))}
@@ -176,7 +230,7 @@ const FamilyTree = () => {
         <Text className='text-xl text-gray-600'>No Data Found!</Text>
       )}
       <TouchableOpacity
-        className='absolute bottom-4 h-[40px] w-[200px] bg-blue-700 justify-center items-center rounded-md'
+        className='mx-auto bg-blue-700 justify-center items-center rounded-md px-2 py-2 mb-4'
         onPress={() => dispatch(clearUser())}
       >
         <Text className='font-bold text-white text-xl'>Logout</Text>

@@ -25,8 +25,8 @@ app.use(errorHandlerMiddleware);
 const start = async () => {
   try {
     await connectToDB(process.env.MONGODB_URI);
-    app.listen(process.env.PORT || 5001, '0.0.0.0', () => {
-      console.log(`Server is listening on port ${process.env.PORT || 5001}`);
+    app.listen(process.env.PORT, '0.0.0.0', () => {
+      console.log(`Server is listening on port ${process.env.PORT}`);
     });
   } catch (error) {
     console.log(error);

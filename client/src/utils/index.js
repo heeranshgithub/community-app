@@ -22,4 +22,19 @@ const sampleUserData = {
   ],
 };
 
-export { sampleUserData, secureStorage };
+// formats date into DD-MM-YY format
+const formatDate = (dateISOString) => {
+  const date = new Date(dateISOString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = String(date.getFullYear()).slice(2);
+  return `${day}-${month}-${year}`;
+};
+
+export { sampleUserData, secureStorage, formatDate };
+
+// Children of Mahatma Gandhi (with his wife Kasturba Gandhi):
+// Harilal Gandhi (1888–1948)
+// Manilal Gandhi (1892–1956)
+// Ramdas Gandhi (1897–1969)
+// Devdas Gandhi (1900–1957)

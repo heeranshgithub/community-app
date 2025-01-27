@@ -13,7 +13,7 @@ const register = async (req, res) => {
   if (numberExists) throw new BadRequestError('Number already in use!');
 
   if (password.length < 6)
-    throw new BadRequestError('Password must be longer than 6 characters!');
+    throw new BadRequestError('Password must be at least 6 characters long!');
 
   const user = await User.create({ number, name, gender, password });
   const token = user.createJWT();

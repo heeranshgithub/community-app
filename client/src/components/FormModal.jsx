@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Text,
   TextInput,
@@ -11,6 +11,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { usePostTreeMutation } from '../store/api/treeApiSlice';
+import { formatDate } from '../utils';
 
 const FormModal = ({ visible, onClose, creatorTreeId }) => {
   const [relation, setRelation] = useState('');
@@ -29,7 +30,6 @@ const FormModal = ({ visible, onClose, creatorTreeId }) => {
   const [dob, setDob] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const todayDate = new Date();
-  console.log('todayDate', todayDate);
 
   const [gender, setGender] = useState('');
   const [genderOpen, setGenderOpen] = useState(false);
@@ -45,23 +45,19 @@ const FormModal = ({ visible, onClose, creatorTreeId }) => {
 
   const [postTree, { isLoading }] = usePostTreeMutation();
 
-  // formats date into DD-MM-YY format
-  const formatDate = (date) => {
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = String(date.getFullYear()).slice(2);
-    return `${day}-${month}-${year}`;
-  };
-
   const onDateChange = (event, selectedDate) => {
     setShowDatePicker(false);
-    console.log('selectedDate', selectedDate);
+
     if (selectedDate) {
       setDob(selectedDate);
     }
   };
 
   const handleSubmit = async () => {
+    if (dob.getDate() === todayDate.getDate()) {
+      Alert.alert('Error', 'Please select valid DOB. DOB cannot be today.');
+      return;
+    }
     if (
       !name ||
       !number ||
@@ -69,8 +65,7 @@ const FormModal = ({ visible, onClose, creatorTreeId }) => {
       !gender ||
       !education ||
       !company ||
-      !about ||
-      dob.getDate() === todayDate.getDate()
+      !about
     ) {
       Alert.alert('Error', 'Please fill out all fields.');
       return;
@@ -103,7 +98,11 @@ const FormModal = ({ visible, onClose, creatorTreeId }) => {
         },
       ]);
     } catch (error) {
-      Alert.alert('Error', 'Failed to add family member');
+      let errorMessage = 'Failed to add family member';
+      if (error.data.message.split(' ')[0] === 'E11000') {
+        errorMessage = 'User with this number already exists!';
+      }
+      Alert.alert('Error', errorMessage);
     }
   };
 
@@ -143,7 +142,7 @@ const FormModal = ({ visible, onClose, creatorTreeId }) => {
                 onPress={onClose}
                 className='p-2 rounded-full bg-gray-700'
               >
-                <Text className='text-white text-lg'>✕</Text>
+                <Text className='text-white text-lg px-2'>✕</Text>
               </TouchableOpacity>
             </View>
 
@@ -170,13 +169,13 @@ const FormModal = ({ visible, onClose, creatorTreeId }) => {
                 borderColor: '#D1D5DB',
               }}
               textStyle={{
-                fontSize: 16,
+                fontSize: 14,
               }}
             />
 
             <Text className='text-white text-sm mb-2 mt-4'>Name</Text>
             <TextInput
-              className='bg-white rounded-lg px-4 py-3 text-base mb-4 shadow-sm'
+              className='bg-white rounded-lg px-4 h-12 text-base mb-4 shadow-sm'
               placeholder='Name'
               value={name}
               onChangeText={setName}
@@ -185,7 +184,7 @@ const FormModal = ({ visible, onClose, creatorTreeId }) => {
 
             <Text className='text-white text-sm mb-2'>Number</Text>
             <TextInput
-              className='bg-white rounded-lg px-4 py-3 text-base mb-4 shadow-sm'
+              className='bg-white rounded-lg px-4 h-12 text-base mb-4 shadow-sm'
               placeholder='Number'
               value={number}
               onChangeText={setNumber}
@@ -196,7 +195,7 @@ const FormModal = ({ visible, onClose, creatorTreeId }) => {
             <Text className='text-white text-sm mb-2'>Date of Birth</Text>
             <TouchableOpacity
               onPress={() => setShowDatePicker(true)}
-              className='bg-white rounded-lg px-4 py-3 mb-4 shadow-sm'
+              className='bg-white rounded-lg px-4 py-2 mb-4 shadow-sm'
             >
               <Text
                 className={
@@ -204,7 +203,7 @@ const FormModal = ({ visible, onClose, creatorTreeId }) => {
                 }
               >
                 {dob.getDate() !== todayDate.getDate()
-                  ? formatDate(dob)
+                  ? formatDate(dob.toISOString())
                   : 'Date of Birth'}
               </Text>
             </TouchableOpacity>
@@ -248,16 +247,18 @@ const FormModal = ({ visible, onClose, creatorTreeId }) => {
 
             <Text className='text-white text-sm mb-2 mt-4'>Address</Text>
             <TextInput
-              className='bg-white rounded-lg px-4 py-3 text-base mb-4 shadow-sm'
+              className='bg-white rounded-lg px-4 py-2 text-base mb-4 shadow-sm h-24'
               placeholder='Address'
               value={address}
               onChangeText={setAddress}
+              multiline={true}
+              textAlignVertical='top'
               placeholderTextColor='#96a2b5'
             />
 
             <Text className='text-white text-sm mb-2'>Education</Text>
             <TextInput
-              className='bg-white rounded-lg px-4 py-3 text-base mb-4 shadow-sm'
+              className='bg-white rounded-lg px-4 h-12 text-base mb-4 shadow-sm'
               placeholder='Education'
               value={education}
               onChangeText={setEducation}
@@ -266,7 +267,7 @@ const FormModal = ({ visible, onClose, creatorTreeId }) => {
 
             <Text className='text-white text-sm mb-2'>Company</Text>
             <TextInput
-              className='bg-white rounded-lg px-4 py-3 text-base mb-4 shadow-sm'
+              className='bg-white rounded-lg px-4 h-12 text-base mb-4 shadow-sm'
               placeholder='Company'
               value={company}
               onChangeText={setCompany}
@@ -275,7 +276,7 @@ const FormModal = ({ visible, onClose, creatorTreeId }) => {
 
             <Text className='text-white text-sm mb-2'>About</Text>
             <TextInput
-              className='bg-white rounded-lg px-4 py-3 text-base mb-4 shadow-sm h-24'
+              className='bg-white rounded-lg px-4 py-2 text-base mb-4 shadow-sm h-24'
               placeholder='About'
               value={about}
               onChangeText={setAbout}

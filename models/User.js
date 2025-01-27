@@ -20,9 +20,11 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
+    required: [true, 'Please provide password'], // for the time being using number and password for login
+    // will set required to false when user will can login with OTP
     // not setting to required because one user can create the profile of another user
     minlength: 6,
-    maxlength: 30,
+    maxlength: 60,
     select: false,
     trim: true, // trims any extra space from start or end, will also take care of this in the fronted
     // setting select: false for the password field means that by default,
@@ -100,7 +102,7 @@ const UserSchema = new mongoose.Schema({
 });
 
 UserSchema.pre('save', async function () {
-  if (!this.isModified('password')) return; //don't want to hash pass again for updateUser
+  if (!this.isModified('password')) return; //don't want to hash pass again for updateUser, when the user is not updating their password
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   //this 'await has no effect' warning is related to linting or TypeScript rules

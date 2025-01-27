@@ -3,7 +3,8 @@ import { useEffect } from 'react';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import store from '../store/store';
 import { getUserToken, setUser } from '../store/slices/userSlice';
-import '../../global.css';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import '../../global.css'; // for nativewind
 import { secureStorage } from '../utils';
 
 // Auth wrapper component
@@ -38,13 +39,19 @@ const AuthWrapper = () => {
     }
   }, [userToken, segments]);
 
-  return <Slot />;
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <Slot />
+    </SafeAreaView>
+  );
 };
 
 const RootLayout = () => {
   return (
     <Provider store={store}>
-      <AuthWrapper />
+      <SafeAreaProvider>
+        <AuthWrapper />
+      </SafeAreaProvider>
     </Provider>
   );
 };
