@@ -84,15 +84,29 @@ const postTree = async (req, res) => {
       if (creatorTree.gender === 'Male') {
         tree.father = `${creatorTree._id}-${creatorTree.name}`;
       } else {
-        // creatorTree.gender === 'Female'
+        // creatorTree's gender is Female
         tree.mother = `${creatorTree._id}-${creatorTree.name}`;
+      }
+      if (creatorTree.spouse) {
+        const creatorSpouse = await User.findOne({
+          _id: creatorTree.spouse.split('-')[0],
+        });
+        creatorSpouse.children.push(`${tree._id}-${tree.name}-${tree.gender}`);
       }
       break;
     case 'Sibling':
-      creatorTree.siblings.push(`${tree._id}-${tree.name}-${tree.gender}`);
-      tree.siblings.push(
-        `${creatorTree._id}-${creatorTree.name}-${creatorTree.gender}`
-      );
+      if (creatorTree.father) {
+        const creatorFather = await User.findOne({
+          _id: creatorTree.father.split('-')[0],
+        });
+        creatorFather.children.push(`${tree._id}-${tree.name}-${tree.gender}`);
+      }
+      if (creatorTree.mother) {
+        const creatorMother = await User.findOne({
+          _id: creatorTree.mother.split('-')[0],
+        });
+        creatorMother.children.push(`${tree._id}-${tree.name}-${tree.gender}`);
+      }
       break;
     default:
       throw new BadRequestError('Invalid relation type!');

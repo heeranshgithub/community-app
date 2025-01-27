@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Text,
   TextInput,
@@ -13,15 +13,19 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { usePostTreeMutation } from '../store/api/treeApiSlice';
 import { formatDate } from '../utils';
 
-const FormModal = ({ visible, onClose, creatorTreeId }) => {
+const FormModal = ({
+  visible,
+  onClose,
+  creatorTreeId,
+
+  existingMembers,
+  availableRelations,
+}) => {
+  console.log('existingMembers:', existingMembers);
   const [relation, setRelation] = useState('');
-  const [relationItems, setRelationItems] = useState([
-    { label: 'Spouse', value: 'Spouse' },
-    { label: 'Father', value: 'Father' },
-    { label: 'Mother', value: 'Mother' },
-    { label: 'Sibling', value: 'Sibling' },
-    { label: 'Child', value: 'Child' },
-  ]);
+
+  const [relationItems, setRelationItems] = useState(availableRelations);
+
   const [relationOpen, setRelationOpen] = useState(false);
 
   const [name, setName] = useState('');
@@ -117,6 +121,10 @@ const FormModal = ({ visible, onClose, creatorTreeId }) => {
     setCompany('');
     setAbout('');
   };
+
+  useEffect(() => {
+    setRelationItems(availableRelations);
+  }, [availableRelations]);
 
   return (
     <Modal

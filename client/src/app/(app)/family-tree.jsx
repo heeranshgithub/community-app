@@ -10,7 +10,7 @@ import DetailsModal from '../../components/DetailsModal';
 const FamilyTree = () => {
   const [formModalVisible, setFormModalVisible] = useState(false);
   const [detailsModalVisible, setDetailsModalVisible] = useState(false);
-  const [selectedMemberId, setSelectedMemberId] = useState('');
+  const [selectedMemberId, setSelectedMemberId] = useState(null);
   const [selectedMemberRelation, setSelectedMemberRelation] = useState(null);
   const dispatch = useDispatch();
 
@@ -26,6 +26,40 @@ const FamilyTree = () => {
     isError,
   } = useGetTreeQuery(treeId);
 
+  const fatherTreeId = userData?.father ? userData.father.split('-')[0] : '';
+  const motherTreeId = userData?.mother ? userData.mother.split('-')[0] : '';
+  const spouseTreeId = userData?.spouse ? userData.spouse.split('-')[0] : '';
+  const hasFatherOrMother = fatherTreeId || motherTreeId;
+
+  let userParentData;
+  if (fatherTreeId) {
+    const { data, error, isLoading, isSuccess, isError } =
+      useGetTreeQuery(fatherTreeId);
+    userParentData = data;
+  } else if (motherTreeId) {
+    const { data, error, isLoading, isSuccess, isError } =
+      useGetTreeQuery(motherTreeId);
+    userParentData = data;
+  }
+
+  const existingMembers = [];
+  if (fatherTreeId) existingMembers.push('Father');
+  if (motherTreeId) existingMembers.push('Mother');
+  if (spouseTreeId) existingMembers.push('Spouse');
+
+  const initialAvailableRelations = [
+    { label: 'Father', value: 'Father' },
+    { label: 'Mother', value: 'Mother' },
+  ];
+
+  const allAvailableRelations = [
+    { label: 'Spouse', value: 'Spouse' },
+    { label: 'Father', value: 'Father' },
+    { label: 'Mother', value: 'Mother' },
+    { label: 'Sibling', value: 'Sibling' },
+    { label: 'Child', value: 'Child' },
+  ].filter((relation) => !existingMembers.includes(relation.value));
+
   // Helper to chunk children and siblings into rows of 3
   const chunkArray = (arr, size) => {
     const chunks = [];
@@ -35,7 +69,7 @@ const FamilyTree = () => {
     return chunks;
   };
 
-  const siblingsChunks = chunkArray(userData?.siblings || [], 3);
+  const siblingsChunks = chunkArray(userParentData?.children || [], 3);
   const childrenChunks = chunkArray(userData?.children || [], 3);
 
   return (
@@ -71,6 +105,10 @@ const FamilyTree = () => {
         visible={formModalVisible}
         onClose={() => setFormModalVisible(false)}
         creatorTreeId={treeId}
+        existingMembers={existingMembers}
+        availableRelations={
+          hasFatherOrMother ? allAvailableRelations : initialAvailableRelations
+        }
       />
 
       <DetailsModal
@@ -125,7 +163,7 @@ const FamilyTree = () => {
             <Text className='text-xl font-bold text-center text-white mb-2'>
               Siblings
             </Text>
-            {userData.siblings &&
+            {userParentData?.children &&
               (siblingsChunks || []).map((chunk, rowIndex) => (
                 <View
                   key={rowIndex}
